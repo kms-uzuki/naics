@@ -1,3 +1,2 @@
 # naics
-simple optimization scripts for my internship.
-
+simple optimization scripts for internship.
