@@ -1,4 +1,4 @@
-# File created in order to streamline quality control checking of CEUS data.
+# Script created in order to streamline quality control checking of CEUS data.
 # Data collected by ADM Energy, analyzed by the CEC
 # TODO: separate chain of events for when NAICS_site_selected is in set { 531120, 531190, 531312 }.
 
