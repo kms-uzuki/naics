@@ -1,4 +1,7 @@
-#
+# Script created in order to streamline quality control checking of CEUS data.
+# Only works with specific files, but you can probably understand what's going on here.
+# Far less optimized than it could be
+# TODO: delete global dependencies lol
 
 import openpyxl
 import time
