@@ -1,9 +1,12 @@
 # Script created in order to streamline quality control checking of CEUS data.
 # Data collected by ADM Energy, analyzed by the CEC
 # TODO: separate chain of events for when NAICS_site_selected is in set { 531120, 531190, 531312 }.
+    ## Need to analyze these sites separately and potentially assign two NAICS codes.
 
-### NOTE: If you would prefer not to have Chrome autoclose every time you quit or program autosaves,
-### comment out <import os> as well as <os.system('taskkill /im chrome.exe /f')>.
+######################################################################################################
+###### NOTE: If you prefer Chrome not autoclosing every time you quit or the program autosaves, ######
+########### comment out <import os> as well as <os.system('taskkill /im chrome.exe /f')>. ############
+######################################################################################################
 
 import openpyxl    # main library, allows for diverse read/write functions on Excel files
 import webbrowser  # self-explanatory
@@ -38,13 +41,15 @@ def checker(code, code_list):
     return 0
 
 # dictionary of valid NAICS codes, requires a document you can find on the NAICS site 
+# https://www.census.gov/eos/www/naics/2017NAICS/2017_NAICS_Structure.xlsx
 def codeListGenerator(_list, _bookname):
     for j in range(4, 2219):
         x = _bookname.cell( j,  2).value
         _list.append(x)
     return _list
 
-# dictionary of all high-granularity NAICS code descriptions, requires a document you can find on the NAICS site
+# dictionary of all lower-level NAICS code descriptions, requires a document you can find on the NAICS site
+# https://www.census.gov/eos/www/naics/2017NAICS/2017_NAICS_Index_File.xlsx
 def naicsDictionary(_dict, _bookname):
     for k in range(2, 20059):
         a = _bookname.cell( k,  1).value
@@ -90,14 +95,14 @@ def ceushelper(begin, end, editorFile, structureFile, indexFile):
     for i in range(begin, end):
         save_action = 0 # used for manual save
         
-        # NAICS codes assigned by utility, ADM surveyor, etc.
+        # NAICS codes assigned by utility, ADM surveyor, etc. Change as necessary.
         naics_util = sheet.cell(i, 24).value 
         naics_smpl = sheet.cell(i, 25).value 
         naics_svyr = sheet.cell(i, 26).value 
         naics_sele = sheet.cell(i, 27).value 
         naics_call = sheet.cell(i, 28).value 
         naics_supp = sheet.cell(i, 29).value
-        # use set here to ensure only distinct codes
+        # use set here to ensure only distinct codes, python sets won't necessarily preserve order
         naics_set = { naics_util, naics_smpl, naics_svyr, naics_sele, naics_call, naics_supp }
 
         # matches input number to code
@@ -110,7 +115,7 @@ def ceushelper(begin, end, editorFile, structureFile, indexFile):
             "6": naics_supp
             }
         
-        #terribly implemented. matches input to a command
+        # terribly implemented because I'm lazy, matches input to a command
         dd = {
             "1": "VER",
             "2": "VER",
@@ -232,5 +237,5 @@ def ceushelper(begin, end, editorFile, structureFile, indexFile):
         
 
 if __name__ == "__main__":
-    # use your own filenames
+    # use your own filenames, beginning and endpoints.
     ceushelper(2, 13000, 'C:\\Users\\Ksuzuki\\Desktop\\naics_13k 08-19-2019 ALL 4000 - Copy.xlsx', 'C:\\users\\Ksuzuki\\Desktop\\2017_NAICS_Structure.xlsx', 'C:\\users\\Ksuzuki\\Desktop\\2017_NAICS_Index_File.xlsx')
